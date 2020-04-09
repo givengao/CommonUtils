@@ -1,7 +1,7 @@
-package com.zxyun.common.poi.export.factory;
+package com.zxyun.common.poi.factory;
 
-import com.zxyun.common.poi.export.util.ExcelUtil;
-import com.zxyun.common.poi.export.XsgImporterConfig;
+import com.zxyun.common.poi.util.ExcelUtil;
+import com.zxyun.common.poi.model.XsgImporterConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

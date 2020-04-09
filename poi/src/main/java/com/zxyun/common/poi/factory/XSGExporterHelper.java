@@ -1,10 +1,10 @@
-package com.zxyun.common.poi.export.factory;
+package com.zxyun.common.poi.factory;
 
 
-import com.zxyun.common.poi.export.XSGCell;
-import com.zxyun.common.poi.export.XSGSheet;
-import com.zxyun.common.poi.export.XSGWorkBook;
-import com.zxyun.common.poi.export.util.ExcelUtil;
+import com.zxyun.common.poi.model.XSGCell;
+import com.zxyun.common.poi.model.XSGSheet;
+import com.zxyun.common.poi.model.XSGWorkBook;
+import com.zxyun.common.poi.util.ExcelUtil;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,14 +18,14 @@ import java.util.function.Function;
  * @Author: given
  * @Date 2019/9/6 18:33
  */
-public class XSGExcelHelper {
+public class XSGExporterHelper {
 
     private XSGWorkBook xsgWorkBook;
 
-    private XSGExcelHelper (){
+    private XSGExporterHelper(){
     }
 
-    private XSGExcelHelper(XSGWorkBook xsgWorkBook) {
+    private XSGExporterHelper(XSGWorkBook xsgWorkBook) {
         this.xsgWorkBook = xsgWorkBook;
     }
 
@@ -56,7 +56,7 @@ public class XSGExcelHelper {
     }
 
     public interface XsgWorkBookConfig {
-        XSGExcelHelper build();
+        XSGExporterHelper build();
     }
 
     public interface XsgSheetConfig {
@@ -105,8 +105,8 @@ public class XSGExcelHelper {
         }
 
         @Override
-        public XSGExcelHelper build () {
-            return new XSGExcelHelper(bookThreadLocal.get());
+        public XSGExporterHelper build () {
+            return new XSGExporterHelper(bookThreadLocal.get());
         }
     }
 
