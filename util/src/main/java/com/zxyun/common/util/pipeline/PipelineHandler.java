@@ -1,7 +1,7 @@
 package com.zxyun.common.util.pipeline;
 
 /**
- * @des:
+ * @des: 管道处理器节点
  * @Author: given
  * @Date 2020/2/28 16:44
  */

@@ -24,11 +24,7 @@
 package com.zxyun.common.util.pipeline;
 
 /**
- * Main Pipeline class that initially sets the current method. Processed output of the initial
- * method is then passed as the input to the next stage handlers.
- *
- * @param <I> the type of the input for the first stage method
- * @param <O> the final stage method's output type
+ * 管道模式
  */
 class Pipeline<I, O> {
 
