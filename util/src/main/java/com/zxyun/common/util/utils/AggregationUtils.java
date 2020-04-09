@@ -37,7 +37,7 @@ public class AggregationUtils {
     public static <K, V, U> Map<K,List<U>> toMapList (List<? extends V> list,
                                                       Function<? super V, ? extends K> keyMapper,
                                                       Function<? super V, ? extends U> valueMapper) {
-        if (list == null || list.isEmpty()) {
+        if (ArgumentUtils.isEmpty(list)) {
             return new HashMap<>();
         }
 
@@ -55,7 +55,7 @@ public class AggregationUtils {
 
             List<U> vs = listMap.get(key);
 
-            if (vs != null && !vs.isEmpty()) {
+            if (ArgumentUtils.isEmpty(vs)) {
                 vs.add(value);
             } else {
                 vs = new ArrayList<>();
@@ -81,7 +81,7 @@ public class AggregationUtils {
     public static <K, V, U> Map<K,U> toMap (List<? extends V> list,
                                             Function<? super V, ? extends K> keyMapper,
                                             Function<? super V, ? extends U> valueMapper) {
-        if (list == null || list.isEmpty()) {
+        if (ArgumentUtils.isEmpty(list)) {
             return new HashMap<>();
         }
 
@@ -123,7 +123,7 @@ public class AggregationUtils {
     public static <U, V> List<U> toList(List<? extends V> list,
                                         Function<? super V, ? extends U> mapper,
                                         Predicate<? super V> predicate) {
-        if (list == null || list.isEmpty()) {
+        if (ArgumentUtils.isEmpty(list)) {
             return new ArrayList<>();
         }
 
@@ -187,7 +187,7 @@ public class AggregationUtils {
      */
     public static <U, V> List<U> toDistinctList (List<? extends V> list,
                                                  Function<? super V, ? extends U> mapper) {
-        if (list == null || list.isEmpty()) {
+        if (ArgumentUtils.isEmpty(list)) {
             return new ArrayList<>();
         }
 
@@ -224,7 +224,7 @@ public class AggregationUtils {
     public static <U, V> List<U> sort (List<? extends V> list,
                                        Function<? super V, ? extends U> mapper,
                                        Comparator<? super U> comparator) {
-        if (list == null || list.isEmpty()) {
+        if (ArgumentUtils.isEmpty(list)) {
             return new ArrayList<>();
         }
 
@@ -258,7 +258,7 @@ public class AggregationUtils {
                                         Function<? super S, ? extends K> sKeyMapper,
                                         Function<? super D, ? extends K> dKeyMapper,
                                         BiConsumer<? super S, ? super D> biConsumer) {
-        if (isEmpty(source) || isEmpty(dest) || sKeyMapper == null || dKeyMapper == null || biConsumer == null) {
+        if (ArgumentUtils.isEmpty(source) || ArgumentUtils.isEmpty(dest) || sKeyMapper == null || dKeyMapper == null || biConsumer == null) {
             return;
         }
         Map<K, S> ksMap = toMap(source, sKeyMapper);
@@ -299,7 +299,7 @@ public class AggregationUtils {
      * @param <T>
      */
     public static <T> void consumer (List<? extends T> values, Consumer<? super T> consumer) {
-        if (!isEmpty(values)) {
+        if (!ArgumentUtils.isEmpty(values)) {
             for (T t : values) {
                 if (t != null) {
                     consumer.accept(t);
@@ -318,10 +318,10 @@ public class AggregationUtils {
      * @return
      */
     public static <T, S> List<T> sortClassify (List<T> values, List<S[]> classifyRules, Function<? super T, ? extends S> keyMapper) {
-        if (isEmpty(values)) {
+        if (ArgumentUtils.isEmpty(values)) {
             return new ArrayList<>();
         }
-        if (isEmpty(classifyRules)) {
+        if (ArgumentUtils.isEmpty(classifyRules)) {
             return values;
         }
         return sort(values, (o1, o2) -> getRuleIndex(classifyRules, keyMapper.apply(o1)).compareTo(getRuleIndex(classifyRules, keyMapper.apply(o2))));
@@ -337,10 +337,10 @@ public class AggregationUtils {
      * @return
      */
     public static <T, S> List<T> sortInnerClassify (List<T> values, List<S[]> classifyRules, Function<? super T, ? extends S> keyMapper) {
-        if (isEmpty(values)) {
+        if (ArgumentUtils.isEmpty(values)) {
             return new ArrayList<>();
         }
-        if (isEmpty(classifyRules)) {
+        if (ArgumentUtils.isEmpty(classifyRules)) {
             return values;
         }
         return sort(values, (o1, o2) -> getRuleInnerIndex(classifyRules, keyMapper.apply(o1)).compareTo(getRuleInnerIndex(classifyRules, keyMapper.apply(o2))));
@@ -379,10 +379,10 @@ public class AggregationUtils {
      * @return
      */
     public static <T, S> List<T> sortSingleClassify (List<T> values, List<S> classifyRules, Function<? super T, ? extends S> keyMapper) {
-        if (isEmpty(values)) {
+        if (ArgumentUtils.isEmpty(values)) {
             return new ArrayList<>();
         }
-        if (isEmpty(classifyRules)) {
+        if (ArgumentUtils.isEmpty(classifyRules)) {
             return values;
         }
         return sort(values, (o1, o2) -> getSingleRuleIndex(classifyRules, keyMapper.apply(o1)).compareTo(getSingleRuleIndex(classifyRules, keyMapper.apply(o2))));
@@ -396,10 +396,10 @@ public class AggregationUtils {
      * @return
      */
     public static <T> List<T> sortSingleClassify (List<T> values, List<T> classifyRules) {
-        if (isEmpty(values)) {
+        if (ArgumentUtils.isEmpty(values)) {
             return new ArrayList<>();
         }
-        if (isEmpty(classifyRules)) {
+        if (ArgumentUtils.isEmpty(classifyRules)) {
             return values;
         }
         return sortSingleClassify(values, classifyRules, e -> e);
@@ -486,9 +486,5 @@ public class AggregationUtils {
             }
         }
         return Integer.MAX_VALUE;
-    }
-
-    private static boolean isEmpty (Collection collection) {
-        return (collection == null || collection.isEmpty());
     }
 }
