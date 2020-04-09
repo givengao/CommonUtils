@@ -1,7 +1,7 @@
 package com.zxyun.common.poi.export.util;
 
 
-import com.zxyun.common.poi.export.covert.impl.HSSFWorkbookCovert;
+import com.zxyun.common.poi.export.covert.HSSFWorkbookCovert;
 import com.zxyun.common.util.covert.Covert;
 import com.zxyun.common.poi.export.XSGWorkBook;
 import com.zxyun.common.poi.export.XsgImporterConfig;
