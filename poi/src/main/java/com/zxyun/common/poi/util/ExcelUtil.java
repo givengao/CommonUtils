@@ -64,7 +64,7 @@ public class ExcelUtil {
             logger.error("FileName is blank !");
             return null;
         }
-        if (isEmpty(importerConfigs)) {
+        if (ArgumentUtils.isEmpty(importerConfigs)) {
             logger.error("ImporterConfigs is empty !");
             return null;
         }
@@ -125,7 +125,7 @@ public class ExcelUtil {
                     headerRow.add(cellValue.toString());
                 } else {
                     List<BiConsumer<T, String>> biConsumers = consumerMap.get(cellCount);
-                    if (!isEmpty(biConsumers)) {
+                    if (!ArgumentUtils.isEmpty(biConsumers)) {
                         for (BiConsumer<T, String> biConsumer : biConsumers) {
                             biConsumer.accept(t, cellValue);
                         }
@@ -159,9 +159,5 @@ public class ExcelUtil {
                 logger.error("The file type does not exist !");
         }
         return wb;
-    }
-
-    private static boolean isEmpty (Collection collection) {
-        return (collection == null || collection.isEmpty());
     }
 }
