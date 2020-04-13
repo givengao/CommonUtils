@@ -12,7 +12,9 @@ import com.zxyun.common.db.mysql.model.SelectSqlModel;
 import com.zxyun.common.util.covert.Covert;
 import com.zxyun.common.util.utils.ArgumentUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @des:
@@ -22,6 +24,8 @@ import java.util.List;
 public class SelectSqlCovert<T, U> implements Covert<SelectSqlModel<T, U>, String> {
 
     private static String selectSqlSegment = SqlMethod.SELECT.getSqlSegment();
+
+    private static String totalColumn = "*";
 
     @Override
     public String covert(SelectSqlModel<T, U> selectSqlModel) {
@@ -36,34 +40,41 @@ public class SelectSqlCovert<T, U> implements Covert<SelectSqlModel<T, U>, Strin
         if (tableClass == null) {
             return null;
         }
-        TableName tableName = tableClass.getAnnotation(TableName.class);
-        StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append(selectSqlSegment);
+        List<String> expressions = new ArrayList<>();
+        expressions.add(selectSqlSegment);
         if (!ArgumentUtils.isEmpty(queryColumns)) {
-            sqlBuilder.append(ArgumentUtils.join(queryColumns.toArray(new String[queryColumns.size()]), ","));
+            expressions.add(ArgumentUtils.join(queryColumns.toArray(new String[queryColumns.size()]), ","));
+        } else {
+            expressions.add(totalColumn);
         }
-        sqlBuilder.append(SqlKeyword.FROM.getSqlSegment());
-        sqlBuilder.append(tableName.value());
+        TableName tableName = tableClass.getAnnotation(TableName.class);
+        if (tableName == null) {
+            //todo 日志打印
+            return null;
+        }
+        expressions.add(SqlKeyword.FROM.getSqlSegment());
+        expressions.add(tableName.value());
         if (sqlLink != null && joinClass != null && onCondition != null) {
             TableName joinTableName = joinClass.getAnnotation(TableName.class);
-            sqlBuilder.append(sqlLink.getSqlSegment())
-                    .append(" ")
-                    .append(joinTableName.value())
-                    .append(SqlKeyword.ON.getSqlSegment())
-                    .append(onCondition.getConditionSql());
+            if (joinTableName != null) {
+                expressions.add(sqlLink.getSqlSegment());
+                expressions.add(joinTableName.value());
+                expressions.add(SqlKeyword.ON.getSqlSegment());
+                expressions.add(onCondition.getConditionSql());
+            }
         }
         if (queryCondition != null) {
-            sqlBuilder.append(SqlKeyword.WHERE.getSqlSegment());
-            sqlBuilder.append(queryCondition.getConditionSql());
+            expressions.add(SqlKeyword.WHERE.getSqlSegment());
+            expressions.add(queryCondition.getConditionSql());
         }
         if (groupByCondition != null) {
-            sqlBuilder.append(SqlKeyword.GROUP_BY.getSqlSegment());
-            sqlBuilder.append(groupByCondition.getConditionSql());
+            expressions.add(SqlKeyword.GROUP_BY.getSqlSegment());
+            expressions.add(groupByCondition.getConditionSql());
         }
         if (orderByCondition != null) {
-            sqlBuilder.append(SqlKeyword.ORDER_BY.getSqlSegment());
-            sqlBuilder.append(orderByCondition.getConditionSql());
+            expressions.add(SqlKeyword.ORDER_BY.getSqlSegment());
+            expressions.add(orderByCondition.getConditionSql());
         }
-        return sqlBuilder.toString();
+        return expressions.stream().collect(Collectors.joining(" "));
     }
 }
