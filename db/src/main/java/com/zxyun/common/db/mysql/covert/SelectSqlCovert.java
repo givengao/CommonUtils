@@ -9,7 +9,6 @@ import com.zxyun.common.db.mysql.enums.SqlKeyword;
 import com.zxyun.common.db.mysql.enums.SqlLink;
 import com.zxyun.common.db.mysql.enums.SqlMethod;
 import com.zxyun.common.db.mysql.model.SelectSqlModel;
-import com.zxyun.common.util.covert.Covert;
 import com.zxyun.common.util.utils.ArgumentUtils;
 
 import java.util.ArrayList;
@@ -21,13 +20,13 @@ import java.util.stream.Collectors;
  * @Author: given
  * @Date 2020/4/10 15:47
  */
-public class SelectSqlCovert<T, U> implements Covert<SelectSqlModel<T, U>, String> {
+public class SelectSqlCovert<T, U> {
 
     private static String selectSqlSegment = SqlMethod.SELECT.getSqlSegment();
 
     private static String totalColumn = "*";
 
-    @Override
+
     public String covert(SelectSqlModel<T, U> selectSqlModel) {
         Class<T> tableClass = selectSqlModel.getTableClass();
         Class<U> joinClass = selectSqlModel.getJoinClass();
