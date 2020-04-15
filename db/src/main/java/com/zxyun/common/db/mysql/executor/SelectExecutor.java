@@ -39,9 +39,6 @@ public class SelectExecutor {
     }
 
     public  <T> List<T> selectList (String sql, Class<T> targetClass) {
-//        if (ArgumentUtils.isBlank(sql)) {
-//            return new ArrayList<>();
-//        }
         try {
             Connection connection = MysqlConnection.getInstance();
             Statement statement = connection.createStatement();
