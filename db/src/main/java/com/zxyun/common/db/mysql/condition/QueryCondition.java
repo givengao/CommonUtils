@@ -28,7 +28,7 @@ public class QueryCondition<T, U> extends Condition<T,U> {
         return new QueryCondition<>(tableQuery);
     }
 
-    public QueryCondition<T, U> lt (String column, Function<T, Object> queryFunction) {
+    public QueryCondition<T, U> eq (String column, Function<T, Object> queryFunction) {
         if (ArgumentUtils.isBlank(column)) {
             return this;
         }
@@ -36,7 +36,7 @@ public class QueryCondition<T, U> extends Condition<T,U> {
         if (obj == null) {
             return this;
         }
-        String expression = column + SqlKeyword.LT.getSqlSegment() + obj.toString();
+        String expression = column + SqlKeyword.EQ.getSqlSegment() + "'" + obj.toString() + "'";
         if (expressions.isEmpty()) {
             expressions.add(expression);
         } else {

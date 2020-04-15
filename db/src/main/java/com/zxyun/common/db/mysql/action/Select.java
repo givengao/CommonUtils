@@ -6,6 +6,7 @@ import com.zxyun.common.db.mysql.condition.OrderByCondition;
 import com.zxyun.common.db.mysql.condition.QueryCondition;
 import com.zxyun.common.db.mysql.covert.SelectSqlCovert;
 import com.zxyun.common.db.mysql.enums.SqlLink;
+import com.zxyun.common.db.mysql.factory.ExecutorFactory;
 import com.zxyun.common.db.mysql.model.SelectSqlModel;
 
 import java.util.ArrayList;
@@ -36,6 +37,10 @@ public class Select<T> {
         <U> RightJoin<T, U> rightJoin (Class<U> table);
 
         <U> InnerJoin<T, U> innerJoin (Class<U> table);
+
+        <R> R to ();
+
+        List<T> toList ();
     }
 
     public interface From<T> {
@@ -66,13 +71,15 @@ public class Select<T> {
     }
 
     public interface GroupBy<T, U> {
-        <R> To<R> to ();
+        <R> R to ();
 
         OrderBy<T, U> orderBy (OrderByCondition<T, U> orderByCondition);
     }
 
     public interface OrderBy<T, U> {
-        <R> To<R> to ();
+        <R> R to ();
+
+        List<T> toList ();
     }
 
     public interface To<R> {
@@ -129,6 +136,30 @@ public class Select<T> {
                     return new OnImpl<T,U>(tableClass, joinClass, columns, sqlLink, onCondition);
                 }
             };
+        }
+
+        @Override
+        public <R> R to() {
+            SelectSqlModel<T, Object> selectSqlModel = new SelectSqlModel<>();
+            selectSqlModel.setTableClass(tableClass);
+            selectSqlModel.setQueryColumns(columns);
+
+            SelectSqlCovert<T, Object> selectSqlCovert = new SelectSqlCovert<>();
+            String sql = selectSqlCovert.covert(selectSqlModel);
+            System.out.println(sql);
+            return (R)ExecutorFactory.getSelectExecutor().select(sql, tableClass);
+        }
+
+        @Override
+        public List<T> toList() {
+            SelectSqlModel<T, Object> selectSqlModel = new SelectSqlModel<>();
+            selectSqlModel.setTableClass(tableClass);
+            selectSqlModel.setQueryColumns(columns);
+
+            SelectSqlCovert<T, Object> selectSqlCovert = new SelectSqlCovert<>();
+            String sql = selectSqlCovert.covert(selectSqlModel);
+            System.out.println(sql);
+            return ExecutorFactory.getSelectExecutor().selectList(sql, tableClass);
         }
     }
 
@@ -221,7 +252,7 @@ public class Select<T> {
         }
 
         @Override
-        public <R> To<R> to() {
+        public <R> R to() {
             SelectSqlModel<T, U> selectSqlModel = new SelectSqlModel<>();
             selectSqlModel.setTableClass(tableClass);
             selectSqlModel.setJoinClass(joinClass);
@@ -233,8 +264,9 @@ public class Select<T> {
             selectSqlModel.setOrderByCondition(null);
 
             SelectSqlCovert<T, U> selectSqlCovert = new SelectSqlCovert<>();
-            System.out.println(selectSqlCovert.covert(selectSqlModel));
-            return null;
+            String sql = selectSqlCovert.covert(selectSqlModel);
+            System.out.println(sql);
+            return (R)ExecutorFactory.getSelectExecutor().select(sql, tableClass);
         }
 
         @Override
@@ -274,7 +306,7 @@ public class Select<T> {
         }
 
         @Override
-        public <R> To<R> to() {
+        public <R> R to() {
             SelectSqlModel<T, U> selectSqlModel = new SelectSqlModel<>();
             selectSqlModel.setTableClass(tableClass);
             selectSqlModel.setJoinClass(joinClass);
@@ -286,8 +318,27 @@ public class Select<T> {
             selectSqlModel.setOrderByCondition(orderByCondition);
 
             SelectSqlCovert<T, U> selectSqlCovert = new SelectSqlCovert<>();
-            System.out.println(selectSqlCovert.covert(selectSqlModel));
-            return null;
+            String sql = selectSqlCovert.covert(selectSqlModel);
+            System.out.println(sql);
+            return (R)ExecutorFactory.getSelectExecutor().select(sql, tableClass);
+        }
+
+        @Override
+        public List<T> toList() {
+            SelectSqlModel<T, U> selectSqlModel = new SelectSqlModel<>();
+            selectSqlModel.setTableClass(tableClass);
+            selectSqlModel.setJoinClass(joinClass);
+            selectSqlModel.setQueryColumns(queryColumns);
+            selectSqlModel.setSqlLink(sqlLink);
+            selectSqlModel.setOnCondition(onCondition);
+            selectSqlModel.setQueryCondition(queryCondition);
+            selectSqlModel.setGroupByCondition(groupByCondition);
+            selectSqlModel.setOrderByCondition(orderByCondition);
+
+            SelectSqlCovert<T, U> selectSqlCovert = new SelectSqlCovert<>();
+            String sql = selectSqlCovert.covert(selectSqlModel);
+            System.out.println(sql);
+            return ExecutorFactory.getSelectExecutor().selectList(sql, tableClass);
         }
     }
 

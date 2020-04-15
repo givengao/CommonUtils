@@ -1,6 +1,5 @@
 package com.zxyun.common.db.mysql.enums;
 
-import com.baomidou.mybatisplus.core.conditions.ISqlSegment;
 
 /**
  * @des:

@@ -1,6 +1,6 @@
 package com.zxyun.common.db.mysql.covert;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.zxyun.common.db.mysql.annotation.TableName;
 import com.zxyun.common.db.mysql.condition.GroupByCondition;
 import com.zxyun.common.db.mysql.condition.OnCondition;
 import com.zxyun.common.db.mysql.condition.OrderByCondition;

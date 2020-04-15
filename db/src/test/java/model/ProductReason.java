@@ -1,8 +1,9 @@
 package model;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+
+import com.zxyun.common.db.mysql.annotation.TableField;
+import com.zxyun.common.db.mysql.annotation.TableId;
+import com.zxyun.common.db.mysql.annotation.TableName;
 
 import java.util.Date;
 
