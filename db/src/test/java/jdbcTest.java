@@ -15,7 +15,7 @@ public class jdbcTest {
     @Test
     public void test () {
         TableColumnModel query = new TableColumnModel();
-        query.setTableName("jbd_stock_sharing_operation_detail");
+        query.setTableName("jbd_stock_sharing_repository");
         List<TableColumnModel> tableColumnModels = SqlActionHelper
                 .select()
                 .from(TableColumnModel.class)
