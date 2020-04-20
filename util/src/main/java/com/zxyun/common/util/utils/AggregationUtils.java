@@ -37,7 +37,7 @@ public class AggregationUtils {
     public static <K, V, U> Map<K,List<U>> toMapList (List<? extends V> list,
                                                       Function<? super V, ? extends K> keyMapper,
                                                       Function<? super V, ? extends U> valueMapper) {
-        if (ArgumentUtils.isEmpty(list)) {
+        if (isEmpty(list)) {
             return new HashMap<>();
         }
 
@@ -81,7 +81,7 @@ public class AggregationUtils {
     public static <K, V, U> Map<K,U> toMap (List<? extends V> list,
                                             Function<? super V, ? extends K> keyMapper,
                                             Function<? super V, ? extends U> valueMapper) {
-        if (ArgumentUtils.isEmpty(list)) {
+        if (isEmpty(list)) {
             return new HashMap<>();
         }
 
@@ -123,7 +123,7 @@ public class AggregationUtils {
     public static <U, V> List<U> toList(List<? extends V> list,
                                         Function<? super V, ? extends U> mapper,
                                         Predicate<? super V> predicate) {
-        if (ArgumentUtils.isEmpty(list)) {
+        if (isEmpty(list)) {
             return new ArrayList<>();
         }
 
@@ -187,7 +187,7 @@ public class AggregationUtils {
      */
     public static <U, V> List<U> toDistinctList (List<? extends V> list,
                                                  Function<? super V, ? extends U> mapper) {
-        if (ArgumentUtils.isEmpty(list)) {
+        if (isEmpty(list)) {
             return new ArrayList<>();
         }
 
@@ -224,7 +224,7 @@ public class AggregationUtils {
     public static <U, V> List<U> sort (List<? extends V> list,
                                        Function<? super V, ? extends U> mapper,
                                        Comparator<? super U> comparator) {
-        if (ArgumentUtils.isEmpty(list)) {
+        if (isEmpty(list)) {
             return new ArrayList<>();
         }
 
@@ -267,6 +267,34 @@ public class AggregationUtils {
             S s = ksMap.get(key);
             if (s != null) {
                 biConsumer.accept(s, d);
+            }
+        }
+    }
+
+    /**
+     * 不同对象间根据key关联匹配填充值(多个)
+     * @param source 来源
+     * @param dest 目标
+     * @param sKeyMapper key关联取值函数
+     * @param dKeyMapper key关联取值函数
+     * @param biConsumer 最终匹配处理
+     * @param <S>
+     * @param <D>
+     * @param <K>
+     */
+    public static <S, D, K> void matchList (List<? extends S> source, List<? extends D> dest,
+                                        Function<? super S, ? extends K> sKeyMapper,
+                                        Function<? super D, ? extends K> dKeyMapper,
+                                        BiConsumer<List<? super S>, ? super D> biConsumer) {
+        if (ArgumentUtils.isEmpty(source) || ArgumentUtils.isEmpty(dest) || sKeyMapper == null || dKeyMapper == null || biConsumer == null) {
+            return;
+        }
+        Map<K, List<S>> ksMap = groupToMapList(source, sKeyMapper);
+        for (D d : dest) {
+            K key = dKeyMapper.apply(d);
+            List<S> list = ksMap.get(key);
+            if (list != null && !list.isEmpty()) {
+                biConsumer.accept(list, d);
             }
         }
     }
@@ -486,5 +514,9 @@ public class AggregationUtils {
             }
         }
         return Integer.MAX_VALUE;
+    }
+    
+    public static boolean isEmpty (Collection collection) {
+        return collection == null || collection.isEmpty();
     }
 }
