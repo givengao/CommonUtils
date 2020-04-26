@@ -515,6 +515,41 @@ public class AggregationUtils {
         }
         return Integer.MAX_VALUE;
     }
+
+    /**
+     * list合并
+     * @param list
+     * @param <S>
+     * @return
+     */
+    public static <S> List<S> margeList (List<S> ... list) {
+        if (list == null || list.length <= 0) {
+            return new ArrayList<>();
+        }
+        List<S> sList = new ArrayList<>();
+        for (List<S> it : list) {
+            if (it == null || it.isEmpty()) {
+                continue;
+            }
+            sList.addAll(copyToList(it));
+        }
+        return sList;
+    }
+
+    /**
+     * 集合复制
+     * @param iterable
+     * @param <V>
+     * @return
+     */
+    static <V> List<V> copyToList(Iterable<V> iterable) {
+        List<V> copy = new ArrayList<>();
+        Iterator<V> iterator = iterable.iterator();
+        while (iterator.hasNext()) {
+            copy.add(iterator.next());
+        }
+        return copy;
+    }
     
     public static boolean isEmpty (Collection collection) {
         return collection == null || collection.isEmpty();
