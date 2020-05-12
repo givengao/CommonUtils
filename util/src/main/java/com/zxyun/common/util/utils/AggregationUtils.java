@@ -69,6 +69,50 @@ public class AggregationUtils {
     }
 
     /**
+     * 将list集合进行分组并且生成指定value数据 key -> value 一对多
+     * @param list 源数据
+     * @param keyMapper 指定生成对应key数据函数
+     * @param valueMapper 指定生成对应value数据函数
+     * @param <K>
+     * @param <V>
+     * @param <U>
+     * @return
+     */
+    public static <K, V, U> Map<K,List<U>> toMapList (List<? extends V> list,
+                                                      Function<? super V, ? extends K> keyMapper,
+                                                      Function<? super V, ? extends U> valueMapper, Comparator<? super U> comparator) {
+        if (isEmpty(list)) {
+            return new HashMap<>();
+        }
+
+        Map<K,List<U>> listMap = new HashMap<>();
+
+        for (V v : list) {
+
+            if (v == null) {
+                continue;
+            }
+
+            K key = keyMapper.apply(v);
+
+            U value = valueMapper.apply(v);
+
+            List<U> vs = listMap.get(key);
+
+            if (!isEmpty(vs)) {
+                vs.add(value);
+            } else {
+                vs = new ArrayList<>();
+                vs.add(value);
+            }
+
+            listMap.put(key, sort(vs, comparator));
+        }
+
+        return listMap;
+    }
+
+    /**
      * 将list集合进行分组并且生成指定value数据 key -> value 一对一
      * @param list 源数据
      * @param keyMapper 指定生成对应key数据函数

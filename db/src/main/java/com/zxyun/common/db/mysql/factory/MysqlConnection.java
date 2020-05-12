@@ -9,7 +9,7 @@ import java.sql.DriverManager;
  * @Date 2020/4/14 16:44
  */
 public class MysqlConnection {
-    private String url = "jdbc:mysql://172.18.13.173:3306/information_schema?useUnicode=true&zeroDateTimeBehavior=convertToNull";
+    private String url = "jdbc:mysql://172.18.13.183:3306/information_schema?useUnicode=true&zeroDateTimeBehavior=convertToNull";
     private String userName = "dev_jibiandang";
     private String password = "dev_jibiandang@123456";
 
