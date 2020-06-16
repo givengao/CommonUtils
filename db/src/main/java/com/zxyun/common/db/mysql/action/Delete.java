@@ -7,5 +7,5 @@ package com.zxyun.common.db.mysql.action;
  */
 public class Delete {
     private String name;
-    private Integer nn
+    private Integer nn;
 }
