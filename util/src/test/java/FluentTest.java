@@ -1,8 +1,12 @@
 import com.zxyun.common.util.fluent.MatchFluent;
+import com.zxyun.common.util.utils.SortUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @des:
@@ -28,7 +32,14 @@ public class FluentTest {
                 .sorted(Integer::compareTo)
                 .toList();
 
-        prettyPrint("The first three negative values are: ", firstFiveNegatives);
+        int[] as = new int[]{1,3,6,2,4,8};
+        as = SortUtils.quickSort(as, 0, as.length-1);
+        for (int i : as) {
+            System.out.println("," + i);
+        }
+
+
+        prettyPrint("The first three negative values are: ", Stream.of(SortUtils.quickSort(as, 0, as.length-1)).collect(Collectors.toList()));
     }
 
     private static <E> void prettyPrint(String prefix, Iterable<E> iterable) {

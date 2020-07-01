@@ -123,6 +123,31 @@ public class SortUtils {
         return list.stream().sorted(comparator).collect(Collectors.toList());
     }
 
+    public static int[] quickSort (int[] nums, int left, int right) {
+        if (left < right) {
+            int index = getIndex(nums, left, right);
+            quickSort(nums, left, index);
+            quickSort(nums, index + 1, right);
+        }
+        return nums;
+    }
+
+    private static int getIndex (int[] nums, int left, int right) {
+        int key = nums[left];
+        while (left < right) {
+            while (left < right && nums[right] > key) {
+                right--;
+            }
+            nums[left] = nums[right];
+            while (left < right && nums[left] <= key) {
+                left++;
+            }
+            nums[right] = nums[left];
+        }
+        nums[left] = key;
+        return left;
+    }
+
 
 
     public static void main (String[] args) {
